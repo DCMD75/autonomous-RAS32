@@ -7,12 +7,16 @@
 #include "LidarX4.h"
 
 static __IO uint32_t usTicks;
-
+static __IO uint32_t timeout;
+	
 void SysTick_Handler()
 {
 	if(usTicks)
 	{
-		usTicks--;
+		--usTicks;
+	}
+	if(timeout){
+		--timeout;
 	}
 }
 
@@ -24,7 +28,7 @@ void DelayUs(uint32_t us)
 
 void DelayMs(uint32_t ms)
 {
-	while(ms--)
+	while(--ms)
 	{
 		DelayUs(1000);
 	}
@@ -138,7 +142,16 @@ int main()
 	/* Read lidar data and send it to PC for infinity */
 	while(1)
 	{
-		lidarReadPacket(data);
-		PCWritePacket(data);
+		/* Set the time out at 50 ms*/
+		timeout = 50000;
+		/* Check that the timeout is not exceded*/
+		while(timeout){
+			/* Read a packet of data from lidar */
+			lidarReadPacket(data);
+			/* Transmit the packet to the laptop */
+			PCWritePacket(data);
+		}
+		/* Wait for one second */
+		DelayMs(1000);
 	}
 }
