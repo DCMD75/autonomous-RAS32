@@ -6,5 +6,5 @@ However the aim is to build a robot to test different control algorithm and and 
 
 ## Some explanation on the hardware
 The microcontroller is a STM32F103c8. The IDE used for development is the well known Keil software. 
-Everything regarding Keil is not git set in the project.
+Everything regarding Keil is not set in the git project.
 To be continued ...
